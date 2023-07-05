@@ -1,3 +1,5 @@
+import 'package:checkout/src/constants.dart';
+import 'package:checkout/src/widgets/screens/checkout_screen.dart';
 import 'package:checkout/theme/checkout_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -33,11 +35,11 @@ class App extends StatelessWidget {
           settings: routeSettings,
           builder: (BuildContext context) {
             switch (routeSettings.name) {
-              // case SettingsView.routeName:
-              //   return SettingsView(controller: settingsController);
+              case checkoutRouteName:
+                const CheckoutScreen();
             }
 
-            return const FlutterLogo();
+            return const CheckoutScreen();
           },
         );
       },
