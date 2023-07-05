@@ -5,6 +5,9 @@ on:
             - develop
     workflow_dispatch:
 
+env:
+  FLUTTER_VERSION: "3.10.5"
+
 jobs:
     analysis:
         name: 'Static analysis'
@@ -39,6 +42,9 @@ jobs:
 
             - name: Sort pubspec.yaml
               run: flutter pub run pubspec_dependency_sorter
+
+            - name: Check unused files
+              run: flutter pub pub run daunused:daunused.dart . lib/main_dev.dart
 
             - name: Run linting
               run: flutter analyze
