@@ -1,30 +1,24 @@
 name: checkout
-description: A new Flutter project.
-
-publish_to: 'none'
-
 version: 1.0.0+1
-
-environment:
+publish_to: none
+description: A new Flutter project.
+environment: 
   sdk: '>=3.0.5 <4.0.0'
-
-dependencies:
-  flutter:
-    sdk: flutter
-  flutter_localizations:
-    sdk: flutter
+dependencies: 
   sentry_flutter: 7.7.0
-
-dev_dependencies:
-  flutter_test:
+  translations_cleaner: 0.0.5
+  flutter: 
     sdk: flutter
-
-  flutter_lints: ^2.0.0
-
-flutter:
-  uses-material-design: true
-
-  generate: true
-
-  assets:
+  flutter_localizations: 
+    sdk: flutter
+dev_dependencies: 
+  flutter_lints: 2.0.0
+  pubspec_dependency_sorter: 1.0.3
+  very_good_analysis: 5.0.0+1
+  flutter_test: 
+    sdk: flutter
+flutter: 
+  assets: 
     - assets/images/
+  uses-material-design: true
+  generate: true

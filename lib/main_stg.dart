@@ -1,17 +1,16 @@
+import 'package:checkout/src/app.dart';
 import 'package:checkout/src/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 
-import 'src/app.dart';
-
 void main() async {
-  const sentryEnvironment = "staging";
+  const sentryEnvironment = 'staging';
 
   await SentryFlutter.init(
     (options) {
-      options.dsn = sentryDsn;
-      options.tracesSampleRate = 1.0;
-      options.environment = sentryEnvironment;
+      options..dsn = sentryDsn
+      ..tracesSampleRate = 1.0
+      ..environment = sentryEnvironment;
     },
     appRunner: () => runApp(
       const App(),
