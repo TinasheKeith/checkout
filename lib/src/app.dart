@@ -1,3 +1,4 @@
+import 'package:checkout/theme/checkout_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -9,6 +10,9 @@ class App extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    const checkoutThemeLight = CheckoutTheme();
+    const checkoutThemeDark = CheckoutTheme(primaryColor: Colors.white);
+
     return MaterialApp(
       restorationScopeId: 'app',
       localizationsDelegates: const [
@@ -22,8 +26,8 @@ class App extends StatelessWidget {
       ],
       onGenerateTitle: (BuildContext context) =>
           AppLocalizations.of(context)!.appTitle,
-      theme: ThemeData(),
-      darkTheme: ThemeData.dark(),
+      theme: checkoutThemeLight.toThemeData(),
+      darkTheme: checkoutThemeDark.toThemeData(),
       onGenerateRoute: (RouteSettings routeSettings) {
         return MaterialPageRoute<void>(
           settings: routeSettings,
