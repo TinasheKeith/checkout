@@ -5,9 +5,6 @@ on:
             - develop
     workflow_dispatch:
 
-env:
-    FLUTTER_VERSION: "3.10.5"
-
 jobs:
     analysis:
         name: 'Static analysis'
@@ -48,5 +45,10 @@ jobs:
 
             - name: Run Flutter tests
               run: flutter test
+
+            - name: Build app
+              run: flutter build apk --debug --flavor development -t lib/main_dev.dart
+
+
 
             
