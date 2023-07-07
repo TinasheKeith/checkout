@@ -25,27 +25,6 @@ jobs:
             - name: Get packages
               run: flutter pub get
 
-            - name: Install Asset Cleaner
-              run: flutter pub global activate assets_cleaner
-
-            - name: Show unused assets
-              run: assets_cleaner unused
-
-            - name: Remove unused assets
-              run: assets_cleaner clean
-
-            - name: List unused strings
-              run: flutter pub run translations_cleaner list-unused-terms
-
-            - name: Delete unused strings
-              run: flutter pub run translations_cleaner clean-translations
-
-            - name: Sort pubspec.yaml
-              run: flutter pub run pubspec_dependency_sorter
-
-            - name: Check unused files
-              run: flutter pub pub run daunused:daunused.dart . lib/main_dev.dart
-
             - name: Run linting
               run: flutter analyze
 

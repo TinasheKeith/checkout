@@ -1,0 +1,21 @@
+{
+  "projects": {
+    "default": "checkout-dev-a0249"
+  },
+  "targets": {
+    "checkout-dev-a0249": {
+      "hosting": {
+        "development": [
+          "checkout-dev-a0249"
+        ],
+        "staging": [
+          "checkout-staging-d836d"
+        ],
+        "production": [
+          "checkout-prod-d4831"
+        ]
+      }
+    }
+  },
+  "etags": {}
+}
