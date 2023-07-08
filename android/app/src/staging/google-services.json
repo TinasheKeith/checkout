@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "128216506895",
+    "project_id": "checkout-staging-d836d",
+    "storage_bucket": "checkout-staging-d836d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:128216506895:android:2e178f48cb9bafd1d4397a",
+        "android_client_info": {
+          "package_name": "com.example.checkout"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "128216506895-gu2ah6604e04s998vg54uh7a5b8h7lpi.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC-H840XloVG5ViykpkalfilOt4IeoTTv0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "128216506895-gu2ah6604e04s998vg54uh7a5b8h7lpi.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
