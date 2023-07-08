@@ -55,7 +55,7 @@ jobs:
               run: flutter build appbundle --debug --flavor development -t lib/main_dev.dart
 
             - name: Distribute Android App 🧱 - Development
-              uses: hasretsariyer/firebase-app-distribution-github-action@v1
+              uses: hasretsariyer/firebase-app-distribution-github-action@v1.0
               with:
                 app_id: ${{ secrets.CHECKOUT_DEV_FIREBASE_APP_ID }}
                 firebase_token: ${{ secrets.FIREBASE_TOKEN }}
@@ -67,10 +67,9 @@ jobs:
               run: flutter build appbundle --profile --flavor staging -t lib/main_stg.dart
   
             - name: Distribute Android App 🧱 - Staging
-              uses: hasretsariyer/firebase-app-distribution-github-action@v1
+              uses: hasretsariyer/firebase-app-distribution-github-action@v1.0
               with:
                   app_id: ${{ secrets.CHECKOUT_STAGING_FIREBASE_APP_ID }}
                   firebase_token: ${{ secrets.FIREBASE_TOKEN }}
                   app_file: build/app/outputs/bundle/stagingProfile/app-staging-profile.aab
                   tester_groups: testers
-            
