@@ -64,7 +64,7 @@ jobs:
 
 
             - name: Build Android 🧱 - Staging
-              uses: flutter build appbundle --profile --flavor staging -t lib/main_stg.dart
+              run: flutter build appbundle --profile --flavor staging -t lib/main_stg.dart
   
             - name: Distribute Android App 🧱 - Staging
               uses: hasretsariyer/firebase-app-distribution-github-action@v1
