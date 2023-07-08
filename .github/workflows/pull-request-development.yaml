@@ -54,10 +54,10 @@ jobs:
             - name: Build Android 🧱 - Development
               run: flutter build appbundle --debug --flavor development -t lib/main_dev.dart
 
-            - name: Distribute Android App 🧱 - Development
+            - name: Distribute Android 🚀 - Development
               uses: wzieba/Firebase-Distribution-Github-Action@v1
               with:
-                app_id: ${{ secrets.CHECKOUT_DEV_FIREBASE_APP_ID }}
+                appId: ${{ secrets.CHECKOUT_DEV_FIREBASE_APP_ID }}
                 serviceCredentialsFileContent: ${{ secrets.FIREBASE_DEV_SERVICE_ACCOUNT_CONTENT }}
                 file: build/app/outputs/bundle/developmentDebug/app-development-debug.aab
                 groups: testers
@@ -66,10 +66,10 @@ jobs:
             - name: Build Android 🧱 - Staging
               run: flutter build appbundle --profile --flavor staging -t lib/main_stg.dart
   
-            - name: Distribute Android App 🧱 - Staging
+            - name: Distribute Android 🚀 - Staging
               uses: wzieba/Firebase-Distribution-Github-Action@v1
               with:
-                  app_id: ${{ secrets.CHECKOUT_STAGING_FIREBASE_APP_ID }}
+                  appId: ${{ secrets.CHECKOUT_STAGING_FIREBASE_APP_ID }}
                   serviceCredentialsFileContent: ${{ secrets.FIREBASE_STAGING_SERVICE_ACCOUNT_CONTENT }}
                   file: build/app/outputs/bundle/stagingProfile/app-staging-profile.aab
                   groups: testers
