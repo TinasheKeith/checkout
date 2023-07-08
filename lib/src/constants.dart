@@ -1,4 +1,9 @@
-// Environment Variables
+/// App Name
+const checkoutAppName = 'Checkout';
 
-/// SentryDSN identifier for Checkout Sentry Project 
+// Environment Variables
+/// SentryDSN identifier for Checkout Sentry Project
 const sentryDsn = String.fromEnvironment('sentry-dsn');
+
+// App Routes
+const checkoutRouteName = '/';

@@ -6,11 +6,11 @@ on:
     workflow_dispatch:
 
 env:
-    FLUTTER_VERSION: "3.10.5"
+  FLUTTER_VERSION: "3.10.5"
 
 jobs:
     analysis:
-        name: 'Static analysis'
+        name: 'Checkout''s very nifty, totally efficient dev pipeline XD ☠️ 🛑'
         runs-on: ubuntu-latest
         defaults:
             run:
@@ -25,28 +25,32 @@ jobs:
             - name: Get packages
               run: flutter pub get
 
-            - name: Install Asset Cleaner
-              run: flutter pub global activate assets_cleaner
-
-            - name: Show unused assets
-              run: assets_cleaner unused
-
-            - name: Remove unused assets
-              run: assets_cleaner clean
-
-            - name: List unused strings
-              run: flutter pub run translations_cleaner list-unused-terms
-
-            - name: Delete unused strings
-              run: flutter pub run translations_cleaner clean-translations
-
-            - name: Sort pubspec.yaml
-              run: flutter pub run pubspec_dependency_sorter
-
             - name: Run linting
               run: flutter analyze
 
             - name: Run Flutter tests
               run: flutter test
+
+            - name: Build Web - Development
+              run: flutter build web -t lib/main_dev.dart
+
+            - name: Deploy Web - Development
+              uses: w9jds/firebase-action@master
+              with:
+                args: deploy --only hosting:development
+              env:
+                FIREBASE_TOKEN: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
+
+            - name: Build Web - Staging
+              run: flutter build web -t lib/main_stg.dart
+
+            - name: Deploy Web - Staging
+              uses: w9jds/firebase-action@master
+              with:
+                args: deploy --only hosting:staging
+              env:
+                FIREBASE_TOKEN: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
+
+
 
             
