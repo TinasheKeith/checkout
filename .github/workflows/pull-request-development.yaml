@@ -31,26 +31,46 @@ jobs:
             - name: Run Flutter tests
               run: flutter test
 
-            - name: Build Web - Development
+            - name: Build Web 🧱 - Development
               run: flutter build web -t lib/main_dev.dart
 
-            - name: Deploy Web - Development
+            - name: Deploy Web 🚀 - Development
               uses: w9jds/firebase-action@master
               with:
                 args: deploy --only hosting:development
               env:
                 FIREBASE_TOKEN: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
 
-            - name: Build Web - Staging
+            - name: Build Web 🧱 - Staging
               run: flutter build web -t lib/main_stg.dart
 
-            - name: Deploy Web - Staging
+            - name: Deploy Web 🚀 - Staging
               uses: w9jds/firebase-action@master
               with:
                 args: deploy --only hosting:staging
               env:
                 FIREBASE_TOKEN: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
 
+            - name: Build Android 🧱 - Development
+              uses: flutter build appbundle --debug --flavor development -t lib/main_dev.dart
+
+            - name: Distribute Android App 🧱 - Development
+              uses: hasretsariyer/firebase-app-distribution-github-action@v1
+              with:
+                app_id: ${{ secrets.CHECKOUT_DEV_FIREBASE_APP_ID }}
+                firebase_token: ${{ secrets.FIREBASE_TOKEN }}
+                app_file: build/app/outputs/bundle/developmentDebug/app-development-debug.aab
+                tester_groups: testers
 
 
+            - name: Build Android 🧱 - Staging
+              uses: flutter build appbundle --profile --flavor staging -t lib/main_stg.dart
+  
+            - name: Distribute Android App 🧱 - Staging
+              uses: hasretsariyer/firebase-app-distribution-github-action@v1
+              with:
+                  app_id: ${{ secrets.CHECKOUT_STAGING_FIREBASE_APP_ID }}
+                  firebase_token: ${{ secrets.FIREBASE_TOKEN }}
+                  app_file: build/app/outputs/bundle/stagingProfile/app-staging-profile.aab
+                  tester_groups: testers
             
