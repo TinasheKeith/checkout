@@ -52,7 +52,7 @@ jobs:
                 FIREBASE_TOKEN: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
 
             - name: Build Android 🧱 - Development
-              uses: flutter build appbundle --debug --flavor development -t lib/main_dev.dart
+              run: flutter build appbundle --debug --flavor development -t lib/main_dev.dart
 
             - name: Distribute Android App 🧱 - Development
               uses: hasretsariyer/firebase-app-distribution-github-action@v1
