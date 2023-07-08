@@ -10,7 +10,7 @@ env:
 
 jobs:
     analysis:
-        name: 'Checkout''s very nifty, totally efficient dev pipeline XD ☠️'
+        name: 'Checkout''s very nifty, totally efficient dev pipeline XD ☠️ 🛑'
         runs-on: ubuntu-latest
         defaults:
             run:
