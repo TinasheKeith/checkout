@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 enum AppScreen {
   dashboard,
   settings,
+  cardValidation,
 }
 
 class NavigationHelperViewModel extends ChangeNotifier {
@@ -16,6 +17,11 @@ class NavigationHelperViewModel extends ChangeNotifier {
   }
 
   void navigateToSettings() {
+    _currentScreen = AppScreen.settings;
+    notifyListeners();
+  }
+
+  void navigateToCardValidation() {
     _currentScreen = AppScreen.settings;
     notifyListeners();
   }
