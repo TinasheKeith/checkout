@@ -5,23 +5,26 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 class AppScaffoldViewModel {
-  int _currentScreenIndex = 0;
+  AppScaffoldViewModel(this.navigationShell);
 
-  int get currentScreenIndex => _currentScreenIndex;
+  final StatefulNavigationShell navigationShell;
 
   void navigateToDashboard(BuildContext context) {
-    context.goNamed(SettingsScreen.name);
-    print('pushed to navigateToDashboard screen!');
-    _currentScreenIndex = 0;
+    context.goNamed(DashboardScreen.name);
   }
 
   void navigateToSettings(BuildContext context) {
     context.goNamed(SettingsScreen.name);
-    print('pushed to navigateToSettings screen!');
-    _currentScreenIndex = 1;
   }
 
   void navigateToCardValidation() {
-    router.push(CheckoutScreen.name);
+    router.push(DashboardScreen.name);
+  }
+
+  void goBranch(int index) {
+    navigationShell.goBranch(
+      index,
+      initialLocation: index == navigationShell.currentIndex,
+    );
   }
 }

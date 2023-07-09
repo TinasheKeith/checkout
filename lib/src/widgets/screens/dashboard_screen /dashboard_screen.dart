@@ -1,8 +1,8 @@
 import 'package:checkout/src/constants.dart';
 import 'package:flutter/material.dart';
 
-class CheckoutScreen extends StatelessWidget {
-  const CheckoutScreen({super.key});
+class DashboardScreen extends StatelessWidget {
+  const DashboardScreen({super.key});
 
   static const name = 'dashboard';
 

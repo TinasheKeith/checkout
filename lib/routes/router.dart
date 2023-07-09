@@ -5,34 +5,46 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 final GlobalKey<NavigatorState> _rootNavigatorKey = GlobalKey<NavigatorState>();
-final GlobalKey<NavigatorState> _shellNavigatorKey =
+
+final GlobalKey<NavigatorState> _shellNavigatorHomeScreen =
+    GlobalKey<NavigatorState>();
+
+final GlobalKey<NavigatorState> _shellNavigatorSettingsScreen =
     GlobalKey<NavigatorState>();
 
 GoRouter router = GoRouter(
   navigatorKey: _rootNavigatorKey,
   routes: [
-    ShellRoute(
-      navigatorKey: _shellNavigatorKey,
-      builder: (context, state, child) {
-        return AppScaffold();
+    StatefulShellRoute.indexedStack(
+      builder: (context, state, navigationShell) {
+        return AppScaffold(
+          navigationShell: navigationShell,
+        );
       },
-      routes: [
-        GoRoute(
-          name: CheckoutScreen.name,
-          path: '/',
-          builder: (context, state) => const CheckoutScreen(),
+      branches: [
+        StatefulShellBranch(
+          navigatorKey: _shellNavigatorHomeScreen,
+          routes: [
+            GoRoute(
+              name: DashboardScreen.name,
+              path: '/',
+              pageBuilder: (context, state) => const NoTransitionPage(
+                child: DashboardScreen(),
+              ),
+            ),
+          ],
         ),
-        GoRoute(
-          name: SettingsScreen.name,
-          path: '/settings',
-          builder: (context, state) => const CheckoutScreen(),
+        StatefulShellBranch(
+          navigatorKey: _shellNavigatorSettingsScreen,
+          routes: [
+            GoRoute(
+              name: SettingsScreen.name,
+              path: '/settings',
+              builder: (context, state) => const SettingsScreen(),
+            ),
+          ],
         ),
       ],
-    ),
-    GoRoute(
-      name: 'validate',
-      path: '/validate',
-      builder: (context, state) => const CheckoutScreen(),
     ),
   ],
 );

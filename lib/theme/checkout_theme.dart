@@ -43,6 +43,9 @@ class CheckoutTheme extends ThemeExtension<CheckoutTheme> {
       appBarTheme: AppBarTheme(
         backgroundColor: isLight ? Colors.white : colorScheme.surface,
       ),
+      bottomNavigationBarTheme: const BottomNavigationBarThemeData(
+        elevation: 0,
+      ),
       inputDecorationTheme: const InputDecorationTheme(
         border: OutlineInputBorder(),
       ),
