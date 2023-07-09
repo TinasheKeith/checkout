@@ -1,5 +1,4 @@
-import 'package:checkout/src/constants.dart';
-import 'package:checkout/src/widgets/screens/dashboard_screen%20/dashboard_screen.dart';
+import 'package:checkout/routes/router.dart';
 import 'package:checkout/theme/checkout_theme.dart';
 import 'package:device_preview/device_preview.dart';
 import 'package:flutter/material.dart';
@@ -16,7 +15,7 @@ class App extends StatelessWidget {
     const checkoutThemeLight = CheckoutTheme();
     const checkoutThemeDark = CheckoutTheme(primaryColor: Colors.white);
 
-    return MaterialApp(
+    return MaterialApp.router(
       restorationScopeId: 'app',
       localizationsDelegates: const [
         AppLocalizations.delegate,
@@ -33,19 +32,7 @@ class App extends StatelessWidget {
       theme: checkoutThemeLight.toThemeData(),
       darkTheme: checkoutThemeDark.toThemeData(),
       builder: DevicePreview.appBuilder,
-      onGenerateRoute: (RouteSettings routeSettings) {
-        return MaterialPageRoute<void>(
-          settings: routeSettings,
-          builder: (BuildContext context) {
-            switch (routeSettings.name) {
-              case checkoutRouteName:
-                const CheckoutScreen();
-            }
-
-            return const CheckoutScreen();
-          },
-        );
-      },
+      routerConfig: router,
     );
   }
 }
