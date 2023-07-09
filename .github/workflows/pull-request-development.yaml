@@ -59,7 +59,7 @@ jobs:
               with:
                 appId: ${{ secrets.CHECKOUT_DEV_FIREBASE_APP_ID }}
                 serviceCredentialsFileContent: ${{ secrets.FIREBASE_DEV_SERVICE_ACCOUNT_CONTENT }}
-                file: build/app/outputs/bundle/developmentDebug/app-development-debug.apk
+                file: build/app/outputs/flutter-apk/app-development-debug.apk
                 groups: testers
 
 
@@ -71,5 +71,5 @@ jobs:
               with:
                   appId: ${{ secrets.CHECKOUT_STAGING_FIREBASE_APP_ID }}
                   serviceCredentialsFileContent: ${{ secrets.FIREBASE_STAGING_SERVICE_ACCOUNT_CONTENT }}
-                  file: build/app/outputs/bundle/stagingProfile/app-staging-profile.apk
+                  file: build/app/outputs/flutter-apk/app-staging-profile.apk
                   groups: testers
