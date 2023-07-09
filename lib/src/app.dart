@@ -1,5 +1,5 @@
 import 'package:checkout/src/constants.dart';
-import 'package:checkout/src/widgets/screens/checkout_screen.dart';
+import 'package:checkout/src/widgets/screens/dashboard_screen%20/dashboard_screen.dart';
 import 'package:checkout/theme/checkout_theme.dart';
 import 'package:device_preview/device_preview.dart';
 import 'package:flutter/material.dart';
