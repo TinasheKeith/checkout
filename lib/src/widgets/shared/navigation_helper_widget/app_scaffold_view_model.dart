@@ -1,31 +1,27 @@
 import 'package:checkout/routes/router.dart';
 import 'package:checkout/src/widgets/screens/dashboard_screen%20/dashboard_screen.dart';
+import 'package:checkout/src/widgets/screens/settings_screen/settings_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class AppScaffoldViewModel {
-  void navigateToDashboard() {
-    router.push(CheckoutScreen.name);
+  int _currentScreenIndex = 0;
+
+  int get currentScreenIndex => _currentScreenIndex;
+
+  void navigateToDashboard(BuildContext context) {
+    context.goNamed(SettingsScreen.name);
+    print('pushed to navigateToDashboard screen!');
+    _currentScreenIndex = 0;
   }
 
-  void navigateToSettings() {
-    router.push(CheckoutScreen.name);
+  void navigateToSettings(BuildContext context) {
+    context.goNamed(SettingsScreen.name);
+    print('pushed to navigateToSettings screen!');
+    _currentScreenIndex = 1;
   }
 
   void navigateToCardValidation() {
     router.push(CheckoutScreen.name);
-  }
-
-  int getSelectedIndex(BuildContext context) {
-    final currentRoute = ModalRoute.of(context)?.settings.name;
-
-    switch (currentRoute) {
-      case '/':
-        return 0;
-      case '/settings':
-        return 1;
-
-      default:
-        return 0;
-    }
   }
 }

@@ -1,4 +1,5 @@
 import 'package:checkout/src/widgets/screens/dashboard_screen%20/dashboard_screen.dart';
+import 'package:checkout/src/widgets/screens/settings_screen/settings_screen.dart';
 import 'package:checkout/src/widgets/shared/navigation_helper_widget/app_scaffold.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -22,7 +23,7 @@ GoRouter router = GoRouter(
           builder: (context, state) => const CheckoutScreen(),
         ),
         GoRoute(
-          name: 'settings',
+          name: SettingsScreen.name,
           path: '/settings',
           builder: (context, state) => const CheckoutScreen(),
         ),

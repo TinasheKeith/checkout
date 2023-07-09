@@ -36,7 +36,7 @@ class _MobileAppScaffold extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _viewModel.getSelectedIndex(context),
+        currentIndex: _viewModel.currentScreenIndex,
         items: _navbarItems
             .map(
               (navItem) => BottomNavigationBarItem(
@@ -45,6 +45,17 @@ class _MobileAppScaffold extends StatelessWidget {
               ),
             )
             .toList(),
+        onTap: (value) {
+          switch (value) {
+            case 0:
+              _viewModel.navigateToDashboard(context);
+            case 1:
+              _viewModel.navigateToSettings(context);
+
+            default:
+              _viewModel.navigateToDashboard(context);
+          }
+        },
       ),
     );
   }
@@ -59,6 +70,17 @@ class _DesktopAppScaffold extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return NavigationRail(
+      onDestinationSelected: (value) {
+        switch (value) {
+          case 0:
+            _viewModel.navigateToDashboard(context);
+          case 1:
+            _viewModel.navigateToSettings(context);
+
+          default:
+            _viewModel.navigateToDashboard(context);
+        }
+      },
       destinations: _navbarItems
           .map(
             (navItem) => NavigationRailDestination(
@@ -67,7 +89,7 @@ class _DesktopAppScaffold extends StatelessWidget {
             ),
           )
           .toList(),
-      selectedIndex: _viewModel.getSelectedIndex(context),
+      selectedIndex: _viewModel.currentScreenIndex,
     );
   }
 }
