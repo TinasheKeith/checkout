@@ -42,45 +42,51 @@ class _AppScaffoldState extends State<AppScaffold> {
   Widget build(BuildContext context) {
     return ResponsiveBuilder(
       mobileWidget: _MobileAppScaffold(
-        _navbarItems,
-        _viewModel,
-        (value) {
+        navbarItems: _navbarItems,
+        viewModel: _viewModel,
+        onDestinationSelected: (value) {
           context.go('/dashboard');
         },
-        widget.child,
+        onStartValidateCardTapped: () =>
+            _viewModel.openValidateCardScreen(context),
+        child: widget.child,
       ),
       desktopWidget: _DesktopAppScaffold(
-        _navbarItems,
-        _viewModel,
-        (value) {
+        viewModel: _viewModel,
+        onDestinationSelected: (value) {
           context.go('/settings');
         },
-        widget.child,
+        navbarItems: _navbarItems,
+        onStartValidateCardTapped: () =>
+            _viewModel.openValidateCardScreen(context, isMobile: false),
+        child: widget.child,
       ),
     );
   }
 }
 
 class _MobileAppScaffold extends StatelessWidget {
-  const _MobileAppScaffold(
-    this._navbarItems,
-    this._viewModel,
-    this.onDestinationSelected,
-    this.child,
-  );
+  const _MobileAppScaffold({
+    required this.navbarItems,
+    required this.viewModel,
+    required this.onDestinationSelected,
+    required this.child,
+    required this.onStartValidateCardTapped,
+  });
 
-  final List<CheckoutNavbarItem> _navbarItems;
-  final AppScaffoldViewModel _viewModel;
+  final List<CheckoutNavbarItem> navbarItems;
+  final AppScaffoldViewModel viewModel;
   final ValueChanged<int> onDestinationSelected;
   final Widget child;
+  final VoidCallback onStartValidateCardTapped;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: child,
       bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _viewModel.selectedIndex,
-        items: _navbarItems
+        currentIndex: viewModel.selectedIndex,
+        items: navbarItems
             .map(
               (navItem) => BottomNavigationBarItem(
                 icon: navItem.icon,
@@ -88,9 +94,12 @@ class _MobileAppScaffold extends StatelessWidget {
               ),
             )
             .toList(),
-        onTap: (value) => _viewModel.goBranch(context, value),
+        onTap: (value) => viewModel.goBranch(context, value),
       ),
-      floatingActionButton: const _CardValidationButton(showExtended: false),
+      floatingActionButton: _CardValidationButton(
+        showExtended: false,
+        onPressed: onStartValidateCardTapped,
+      ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButtonAnimator: FloatingActionButtonAnimator.scaling,
     );
@@ -98,17 +107,19 @@ class _MobileAppScaffold extends StatelessWidget {
 }
 
 class _DesktopAppScaffold extends StatelessWidget {
-  const _DesktopAppScaffold(
-    this._navbarItems,
-    this._viewModel,
-    this.onDestinationSelected,
-    this.child,
-  );
+  const _DesktopAppScaffold({
+    required this.navbarItems,
+    required this.viewModel,
+    required this.onDestinationSelected,
+    required this.child,
+    required this.onStartValidateCardTapped,
+  });
 
-  final List<CheckoutNavbarItem> _navbarItems;
-  final AppScaffoldViewModel _viewModel;
+  final List<CheckoutNavbarItem> navbarItems;
+  final AppScaffoldViewModel viewModel;
   final Widget child;
   final ValueChanged<int> onDestinationSelected;
+  final VoidCallback onStartValidateCardTapped;
 
   @override
   Widget build(BuildContext context) {
@@ -116,12 +127,12 @@ class _DesktopAppScaffold extends StatelessWidget {
       body: Row(
         children: [
           NavigationRail(
-            selectedIndex: _viewModel.selectedIndex,
+            selectedIndex: viewModel.selectedIndex,
             onDestinationSelected: (value) =>
-                _viewModel.goBranch(context, value),
+                viewModel.goBranch(context, value),
             leading: const CheckoutLogo(),
             useIndicator: true,
-            destinations: _navbarItems
+            destinations: navbarItems
                 .map(
                   (navItem) => NavigationRailDestination(
                     icon: navItem.icon,
@@ -134,29 +145,35 @@ class _DesktopAppScaffold extends StatelessWidget {
           Expanded(child: child),
         ],
       ),
-      floatingActionButton: const _CardValidationButton(),
+      floatingActionButton: _CardValidationButton(
+        onPressed: onStartValidateCardTapped,
+      ),
     );
   }
 }
 
 class _CardValidationButton extends StatelessWidget {
-  const _CardValidationButton({this.showExtended = true});
+  const _CardValidationButton({
+    required this.onPressed,
+    this.showExtended = true,
+  });
 
   final bool showExtended;
+  final VoidCallback onPressed;
 
   @override
   Widget build(BuildContext context) {
     return showExtended
         ? FloatingActionButton.extended(
             tooltip: 'Validate a credit card',
-            onPressed: () {},
+            onPressed: onPressed,
             icon: const Icon(EvaIcons.plusCircleOutline),
             label: const Text('validate'),
           )
         : Transform.rotate(
             angle: 45 / 180.0 * 3.1415926,
             child: FloatingActionButton(
-              onPressed: () {},
+              onPressed: onPressed,
               child: const Icon(EvaIcons.plusCircle),
             ),
           );
