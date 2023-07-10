@@ -1,3 +1,5 @@
+// ignore_for_file: lines_longer_than_80_chars
+
 import 'package:checkout/asset_paths.dart';
 import 'package:credit_card_validator/credit_card_validator.dart';
 import 'package:date_format/date_format.dart';
@@ -64,21 +66,25 @@ enum CheckoutCardType {
 
 class CardInputScreenViewModel with ChangeNotifier {
   final _validator = CreditCardValidator();
+
   final _cardNumberController = TextEditingController();
   final _formattedDateController = TextEditingController();
 
   String? _cardCVV;
-  String? _errorMessage;
   CheckoutCardType? _cardType;
-  DateTime? _selectedDate;
+  DateTime? _selectedExpirationDate;
+  String? _cardNumberErrorMessage;
+  String? _formattedDateErrorMessage;
 
   String? get cardCvv => _cardCVV;
-  String? get errorMessage => _errorMessage;
+  String? get cardNumberErrorMessage => _cardNumberErrorMessage;
+  String? get formattedDateErrorMessage => _formattedDateErrorMessage;
   CheckoutCardType? get cardType => _cardType;
+
   TextEditingController get cardNumberController => _cardNumberController;
   TextEditingController get formattedDateController => _formattedDateController;
 
-  DateTime? get selectedDate => _selectedDate;
+  DateTime? get selectedDate => _selectedExpirationDate;
 
   set cardType(CheckoutCardType? card) {
     _cardType = card;
@@ -86,19 +92,37 @@ class CardInputScreenViewModel with ChangeNotifier {
   }
 
   set selectedDate(DateTime? date) {
-    _selectedDate = date;
+    _selectedExpirationDate = date;
     notifyListeners();
   }
 
-  String? validateCardNumber(String? cardNumber) {
+  String? validateCardNumber(
+    String? cardNumber, {
+    // Making this optional because ideally we don't want to validate this as the user is typing
+    bool validateLength = true,
+  }) {
     if (cardNumber == null || cardNumber.isEmpty) {
       return 'Card number is required';
+    } else if (validateLength && cardNumber.length < 15) {
+      return 'Card number length is invalid';
     }
 
-    _getCardType(cardNumber);
+    _getCardTypeFromCardNumber(cardNumber);
 
-    if (errorMessage != null) {
-      return errorMessage;
+    if (cardNumberErrorMessage != null) {
+      return cardNumberErrorMessage;
+    }
+
+    return null;
+  }
+
+  String? validateExpirationDate(String? date) {
+    if (date == null || date.isEmpty) return 'Expiry date is required';
+
+    final result = _validator.validateExpDate(date);
+
+    if (result.message.isNotEmpty) {
+      return _formattedDateErrorMessage = result.message;
     }
 
     return null;
@@ -118,25 +142,23 @@ class CardInputScreenViewModel with ChangeNotifier {
 
     if (chosenDate == null) return;
 
-    _formattedDateController.text = formatDate(chosenDate, [MM, '/', yy]);
+    _formattedDateController.text = formatDate(chosenDate, [m, '/', yy]);
     notifyListeners();
   }
 
-  void _getCardType(String cardNumber) {
+  void _getCardTypeFromCardNumber(String cardNumber) {
     final result = _validator.validateCCNum(cardNumber);
     if (result.message.isNotEmpty) {
-      _errorMessage = result.message;
+      _cardNumberErrorMessage = result.message;
       _cardType = null;
       notifyListeners();
       return;
     }
 
     if (result.isPotentiallyValid) {
-      _errorMessage = null;
+      _cardNumberErrorMessage = null;
       _cardType = CheckoutCardType.fromString(result.ccType.prettyType);
       notifyListeners();
     }
   }
-
-  void validateCvv(String cvv) {}
 }

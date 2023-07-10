@@ -51,7 +51,10 @@ class CardInputScreen extends StatelessWidget {
                               ],
                               controller: viewModel.cardNumberController,
                               onChanged: (value) {
-                                viewModel.validateCardNumber(value);
+                                viewModel.validateCardNumber(
+                                  value,
+                                  validateLength: false,
+                                );
                               },
                               decoration: InputDecoration(
                                 label: const Text('Credit card number'),
@@ -70,7 +73,9 @@ class CardInputScreen extends StatelessWidget {
                             Row(
                               children: [
                                 Expanded(
+                                  flex: 2,
                                   child: TextFormField(
+                                    validator: viewModel.validateExpirationDate,
                                     controller:
                                         viewModel.formattedDateController,
                                     keyboardType: TextInputType.datetime,
@@ -79,7 +84,7 @@ class CardInputScreen extends StatelessWidget {
                                       viewModel.selectExpiryDate(context);
                                     },
                                     decoration: const InputDecoration(
-                                      label: Text('Expiry Date'),
+                                      label: Text('Expiration Date'),
                                       hintText: '10/26',
                                       floatingLabelBehavior:
                                           FloatingLabelBehavior.auto,
@@ -112,7 +117,9 @@ class CardInputScreen extends StatelessWidget {
               floatingActionButton: MaterialButton(
                 elevation: 0,
                 color: Theme.of(context).primaryColor,
-                onPressed: () {},
+                onPressed: () {
+                  _formKey.currentState?.validate();
+                },
                 child: Text(
                   'SUBMIT FOR VALIDATION',
                   style: Theme.of(context).textTheme.labelMedium?.copyWith(
