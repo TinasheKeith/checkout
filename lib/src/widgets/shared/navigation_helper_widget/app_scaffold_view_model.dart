@@ -5,9 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 class AppScaffoldViewModel with ChangeNotifier {
-  AppScaffoldViewModel(this.navigationShell);
+  int _selectedIndex = 0;
 
-  final StatefulNavigationShell navigationShell;
+  int get selectedIndex => _selectedIndex;
 
   void navigateToDashboard(BuildContext context) {
     context.goNamed(DashboardScreen.name);
@@ -21,9 +21,18 @@ class AppScaffoldViewModel with ChangeNotifier {
     router.push(DashboardScreen.name);
   }
 
-  void goBranch( BuildContext context,int index) {
-    navigationShell.goBranch(
-      index,
-    );
+  void goBranch(BuildContext context, int index) {
+    _selectedIndex = index;
+    final router = GoRouter.of(context);
+
+    switch (index) {
+      case 0:
+        router.go('/dashboard');
+      case 1:
+        router.go('/settings');
+
+      default:
+        router.go('/dashboard');
+    }
   }
 }

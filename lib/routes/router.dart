@@ -7,45 +7,37 @@ import 'package:go_router/go_router.dart';
 final GlobalKey<NavigatorState> _rootNavigatorKey =
     GlobalKey<NavigatorState>(debugLabel: 'root_navigator');
 
-final GlobalKey<NavigatorState> _dashboardShellNavigator =
+final GlobalKey<NavigatorState> _shellNavigator =
     GlobalKey<NavigatorState>(debugLabel: 'dashboard_navigator');
-
-final GlobalKey<NavigatorState> _settingsShellNavigator =
-    GlobalKey<NavigatorState>(debugLabel: 'settings_navigator');
 
 GoRouter router = GoRouter(
   initialLocation: '/dashboard',
   navigatorKey: _rootNavigatorKey,
   debugLogDiagnostics: true,
   routes: [
-    StatefulShellRoute.indexedStack(
-      builder: (context, state, navigationShell) {
+    ShellRoute(
+      navigatorKey: _shellNavigator,
+      builder: (context, state, child) {
         return AppScaffold(
-          navigationShell: navigationShell,
+          child: child,
         );
       },
-      branches: [
-        StatefulShellBranch(
-          routes: [
-            GoRoute(
-              path: '/dashboard',
-              builder: (context, state) => DashboardScreen(
-                key: state.pageKey,
-              ),
+      routes: [
+        GoRoute(
+          path: '/dashboard',
+          pageBuilder: (context, state) => NoTransitionPage(
+            child: DashboardScreen(
+              key: state.pageKey,
             ),
-          ],
+          ),
         ),
-        StatefulShellBranch(
-          routes: [
-            GoRoute(
-              path: '/settings',
-              pageBuilder: (context, state) => NoTransitionPage(
-                child: SettingsScreen(
-                  key: state.pageKey,
-                ),
-              ),
+        GoRoute(
+          path: '/settings',
+          pageBuilder: (context, state) => NoTransitionPage(
+            child: SettingsScreen(
+              key: state.pageKey,
             ),
-          ],
+          ),
         ),
       ],
     ),

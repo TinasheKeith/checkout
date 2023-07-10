@@ -8,11 +8,11 @@ import 'package:go_router/go_router.dart';
 
 class AppScaffold extends StatefulWidget {
   const AppScaffold({
-    required this.navigationShell,
+    required this.child,
     super.key,
   });
 
-  final StatefulNavigationShell navigationShell;
+  final Widget child;
 
   @override
   State<AppScaffold> createState() => _AppScaffoldState();
@@ -23,7 +23,7 @@ class _AppScaffoldState extends State<AppScaffold> {
 
   @override
   void initState() {
-    _viewModel = AppScaffoldViewModel(widget.navigationShell);
+    _viewModel = AppScaffoldViewModel();
     super.initState();
   }
 
@@ -46,8 +46,8 @@ class _AppScaffoldState extends State<AppScaffold> {
         _viewModel,
         (value) {
           context.go('/dashboard');
-          // _viewModel.goBranch(value);
         },
+        widget.child,
       ),
       desktopWidget: _DesktopAppScaffold(
         _navbarItems,
@@ -55,6 +55,7 @@ class _AppScaffoldState extends State<AppScaffold> {
         (value) {
           context.go('/settings');
         },
+        widget.child,
       ),
     );
   }
@@ -65,18 +66,20 @@ class _MobileAppScaffold extends StatelessWidget {
     this._navbarItems,
     this._viewModel,
     this.onDestinationSelected,
+    this.child,
   );
 
   final List<CheckoutNavbarItem> _navbarItems;
   final AppScaffoldViewModel _viewModel;
   final ValueChanged<int> onDestinationSelected;
+  final Widget child;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: _viewModel.navigationShell,
+      body: child,
       bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _viewModel.navigationShell.currentIndex,
+        currentIndex: _viewModel.selectedIndex,
         items: _navbarItems
             .map(
               (navItem) => BottomNavigationBarItem(
@@ -96,11 +99,12 @@ class _DesktopAppScaffold extends StatelessWidget {
     this._navbarItems,
     this._viewModel,
     this.onDestinationSelected,
+    this.child,
   );
 
   final List<CheckoutNavbarItem> _navbarItems;
   final AppScaffoldViewModel _viewModel;
-
+  final Widget child;
   final ValueChanged<int> onDestinationSelected;
 
   @override
@@ -109,6 +113,7 @@ class _DesktopAppScaffold extends StatelessWidget {
       body: Row(
         children: [
           NavigationRail(
+            selectedIndex: _viewModel.selectedIndex,
             onDestinationSelected: (value) =>
                 _viewModel.goBranch(context, value),
             leading: const CheckoutLogo(),
@@ -121,9 +126,8 @@ class _DesktopAppScaffold extends StatelessWidget {
                   ),
                 )
                 .toList(),
-            selectedIndex: _viewModel.navigationShell.currentIndex,
           ),
-          Expanded(child: _viewModel.navigationShell),
+          Expanded(child: child),
         ],
       ),
     );

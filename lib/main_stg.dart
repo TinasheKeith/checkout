@@ -16,7 +16,7 @@ void main() async {
     },
     appRunner: () => runApp(
       DevicePreview(
-        builder: (context) => const App(),
+        builder: (context) =>  const App(),
       ),
     ),
   );
