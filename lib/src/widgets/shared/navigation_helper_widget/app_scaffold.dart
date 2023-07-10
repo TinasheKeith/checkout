@@ -106,6 +106,7 @@ class _DesktopAppScaffold extends StatelessWidget {
   final AppScaffoldViewModel _viewModel;
   final Widget child;
   final ValueChanged<int> onDestinationSelected;
+  final Function onStartValidateCardTapped;
 
   @override
   Widget build(BuildContext context) {
