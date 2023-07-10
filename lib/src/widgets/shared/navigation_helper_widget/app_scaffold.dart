@@ -90,6 +90,9 @@ class _MobileAppScaffold extends StatelessWidget {
             .toList(),
         onTap: (value) => _viewModel.goBranch(context, value),
       ),
+      floatingActionButton: const _CardValidationButton(showExtended: false),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      floatingActionButtonAnimator: FloatingActionButtonAnimator.scaling,
     );
   }
 }
@@ -127,9 +130,35 @@ class _DesktopAppScaffold extends StatelessWidget {
                 )
                 .toList(),
           ),
+          const VerticalDivider(width: 1),
           Expanded(child: child),
         ],
       ),
+      floatingActionButton: const _CardValidationButton(),
     );
+  }
+}
+
+class _CardValidationButton extends StatelessWidget {
+  const _CardValidationButton({this.showExtended = true});
+
+  final bool showExtended;
+
+  @override
+  Widget build(BuildContext context) {
+    return showExtended
+        ? FloatingActionButton.extended(
+            tooltip: 'Validate a credit card',
+            onPressed: () {},
+            icon: const Icon(EvaIcons.plusCircleOutline),
+            label: const Text('validate'),
+          )
+        : Transform.rotate(
+            angle: 45 / 180.0 * 3.1415926,
+            child: FloatingActionButton(
+              onPressed: () {},
+              child: const Icon(EvaIcons.plusCircle),
+            ),
+          );
   }
 }
