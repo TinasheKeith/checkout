@@ -37,24 +37,12 @@ class CardInputScreen extends StatelessWidget {
                           children: [
                             const SizedBox(height: 24),
                             TextFormField(
-                              validator: (value) {
-                                if (value == null || value.isEmpty) {
-                                  return 'Card number is required';
-                                }
-
-                                viewModel.validateCardNumber(value);
-
-                                if (viewModel.errorMessage != null) {
-                                  return viewModel.errorMessage;
-                                }
-
-                                return null;
-                              },
+                              validator: (value) =>
+                                  viewModel.validateCardNumber(value),
                               maxLength: 19,
                               maxLengthEnforcement: MaxLengthEnforcement
                                   .truncateAfterCompositionEnds,
                               keyboardType: TextInputType.number,
-                              
                               inputFormatters: <TextInputFormatter>[
                                 CardTextInputFormatter(),
                                 FilteringTextInputFormatter.allow(
@@ -65,9 +53,15 @@ class CardInputScreen extends StatelessWidget {
                               onChanged: (value) {
                                 viewModel.validateCardNumber(value);
                               },
-                              decoration: const InputDecoration(
-                                label: Text('Credit card number'),
+                              decoration: InputDecoration(
+                                label: const Text('Credit card number'),
                                 hintText: '0000 0000 0000 0000',
+                                suffixIcon: SizedBox(
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(8),
+                                    child: viewModel.cardType?.getLogoAsset(32),
+                                  ),
+                                ),
                                 floatingLabelBehavior:
                                     FloatingLabelBehavior.auto,
                               ),
@@ -77,7 +71,13 @@ class CardInputScreen extends StatelessWidget {
                               children: [
                                 Expanded(
                                   child: TextFormField(
+                                    controller:
+                                        viewModel.formattedDateController,
                                     keyboardType: TextInputType.datetime,
+                                    readOnly: true,
+                                    onTap: () {
+                                      viewModel.selectExpiryDate(context);
+                                    },
                                     decoration: const InputDecoration(
                                       label: Text('Expiry Date'),
                                       hintText: '10/26',
@@ -98,19 +98,6 @@ class CardInputScreen extends StatelessWidget {
                                   ),
                                 ),
                               ],
-                            ),
-                            const SizedBox(height: 8),
-                            DropdownButton(
-                              items: CheckoutCardType.values
-                                  .map(
-                                    (value) =>
-                                        DropdownMenuItem<CheckoutCardType>(
-                                      value: value,
-                                      child: Text(value.cardType),
-                                    ),
-                                  )
-                                  .toList(),
-                              onChanged: (value) {},
                             ),
                             const SizedBox(height: 12),
                           ],
