@@ -56,6 +56,7 @@ class CheckoutTheme extends ThemeExtension<CheckoutTheme> {
       ),
       inputDecorationTheme: const InputDecorationTheme(
         border: OutlineInputBorder(),
+        counterStyle: TextStyle(color: Colors.transparent),
       ),
       floatingActionButtonTheme:
           const FloatingActionButtonThemeData(elevation: 0),

@@ -41,7 +41,7 @@ class AppScaffoldViewModel with ChangeNotifier, ResponsiveMixin {
         MaterialPageRoute<Widget>(
           fullscreenDialog: true,
           builder: (BuildContext context) {
-            return const Dialog.fullscreen(
+            return Dialog.fullscreen(
               child: CardInputScreen(),
             );
           },
@@ -64,7 +64,7 @@ class AppScaffoldViewModel with ChangeNotifier, ResponsiveMixin {
                     maxHeight: 600,
                     minWidth: 350,
                   ),
-                  child: const CardInputScreen(),
+                  child: CardInputScreen(),
                 ),
               ),
             ),
