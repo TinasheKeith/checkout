@@ -2,5 +2,13 @@
   "appTitle": "checkout",
   "@appTitle": {
     "description": "The title of the application"
-  }
+  },
+  "dashboard_nav_title": "Übersicht",
+    "@dashboard_nav_title": {
+    "description": "The Dashboard bottom navbar label"
+    },
+    "settings_nav_title": "Einstellungen",
+    "@settings_nav_title": {
+    "description": "The Settings bottom navbar label"
+    }
 }

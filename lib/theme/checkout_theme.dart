@@ -49,6 +49,8 @@ class CheckoutTheme extends ThemeExtension<CheckoutTheme> {
       inputDecorationTheme: const InputDecorationTheme(
         border: OutlineInputBorder(),
       ),
+      floatingActionButtonTheme:
+          const FloatingActionButtonThemeData(elevation: 0),
     );
   }
 }
