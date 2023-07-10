@@ -17,9 +17,7 @@ class CardInputScreen extends StatelessWidget {
               child: SingleChildScrollView(
                 child: Column(
                   children: [
-                    SizedBox(
-                      height: 24,
-                    ),
+                    SizedBox(height: 24),
                     TextField(
                       decoration: InputDecoration(
                         label: Text('Full name'),
