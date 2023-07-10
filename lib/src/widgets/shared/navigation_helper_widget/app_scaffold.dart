@@ -44,20 +44,32 @@ class _AppScaffoldState extends State<AppScaffold> {
       mobileWidget: _MobileAppScaffold(
         _navbarItems,
         _viewModel,
+        (value) {
+          context.go('/dashboard');
+          // _viewModel.goBranch(value);
+        },
       ),
       desktopWidget: _DesktopAppScaffold(
         _navbarItems,
         _viewModel,
+        (value) {
+          context.go('/settings');
+        },
       ),
     );
   }
 }
 
 class _MobileAppScaffold extends StatelessWidget {
-  const _MobileAppScaffold(this._navbarItems, this._viewModel);
+  const _MobileAppScaffold(
+    this._navbarItems,
+    this._viewModel,
+    this.onDestinationSelected,
+  );
 
   final List<CheckoutNavbarItem> _navbarItems;
   final AppScaffoldViewModel _viewModel;
+  final ValueChanged<int> onDestinationSelected;
 
   @override
   Widget build(BuildContext context) {
@@ -73,27 +85,23 @@ class _MobileAppScaffold extends StatelessWidget {
               ),
             )
             .toList(),
-        onTap: (value) {
-          switch (value) {
-            case 0:
-              _viewModel.navigateToDashboard(context);
-            case 1:
-              _viewModel.navigateToSettings(context);
-
-            default:
-              _viewModel.navigateToDashboard(context);
-          }
-        },
+        onTap: (value) => _viewModel.goBranch(context, value),
       ),
     );
   }
 }
 
 class _DesktopAppScaffold extends StatelessWidget {
-  const _DesktopAppScaffold(this._navbarItems, this._viewModel);
+  const _DesktopAppScaffold(
+    this._navbarItems,
+    this._viewModel,
+    this.onDestinationSelected,
+  );
 
   final List<CheckoutNavbarItem> _navbarItems;
   final AppScaffoldViewModel _viewModel;
+
+  final ValueChanged<int> onDestinationSelected;
 
   @override
   Widget build(BuildContext context) {
@@ -101,17 +109,8 @@ class _DesktopAppScaffold extends StatelessWidget {
       body: Row(
         children: [
           NavigationRail(
-            onDestinationSelected: (value) {
-              switch (value) {
-                case 0:
-                  _viewModel.navigateToDashboard(context);
-                case 1:
-                  _viewModel.navigateToSettings(context);
-
-                default:
-                  _viewModel.navigateToDashboard(context);
-              }
-            },
+            onDestinationSelected: (value) =>
+                _viewModel.goBranch(context, value),
             leading: const CheckoutLogo(),
             useIndicator: true,
             destinations: _navbarItems

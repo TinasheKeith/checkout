@@ -4,7 +4,7 @@ import 'package:checkout/src/widgets/screens/settings_screen/settings_screen.dar
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-class AppScaffoldViewModel {
+class AppScaffoldViewModel with ChangeNotifier {
   AppScaffoldViewModel(this.navigationShell);
 
   final StatefulNavigationShell navigationShell;
@@ -21,10 +21,9 @@ class AppScaffoldViewModel {
     router.push(DashboardScreen.name);
   }
 
-  void goBranch(int index) {
+  void goBranch( BuildContext context,int index) {
     navigationShell.goBranch(
       index,
-      initialLocation: index == navigationShell.currentIndex,
     );
   }
 }
