@@ -31,7 +31,7 @@ const CheckoutCardSchema = CollectionSchema(
     r'expirationDate': PropertySchema(
       id: 2,
       name: r'expirationDate',
-      type: IsarType.dateTime,
+      type: IsarType.string,
     )
   },
   estimateSize: _checkoutCardEstimateSize,
@@ -55,6 +55,7 @@ int _checkoutCardEstimateSize(
 ) {
   var bytesCount = offsets.last;
   bytesCount += 3 + object.cardNumber.length * 3;
+  bytesCount += 3 + object.expirationDate.length * 3;
   return bytesCount;
 }
 
@@ -66,7 +67,7 @@ void _checkoutCardSerialize(
 ) {
   writer.writeString(offsets[0], object.cardNumber);
   writer.writeByte(offsets[1], object.cardType.index);
-  writer.writeDateTime(offsets[2], object.expirationDate);
+  writer.writeString(offsets[2], object.expirationDate);
 }
 
 CheckoutCard _checkoutCardDeserialize(
@@ -80,7 +81,7 @@ CheckoutCard _checkoutCardDeserialize(
     cardType:
         _CheckoutCardcardTypeValueEnumMap[reader.readByteOrNull(offsets[1])] ??
             CheckoutCardType.visa,
-    expirationDate: reader.readDateTime(offsets[2]),
+    expirationDate: reader.readString(offsets[2]),
   );
   object.id = id;
   return object;
@@ -100,7 +101,7 @@ P _checkoutCardDeserializeProp<P>(
               reader.readByteOrNull(offset)] ??
           CheckoutCardType.visa) as P;
     case 2:
-      return (reader.readDateTime(offset)) as P;
+      return (reader.readString(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
   }
@@ -410,49 +411,58 @@ extension CheckoutCardQueryFilter
   }
 
   QueryBuilder<CheckoutCard, CheckoutCard, QAfterFilterCondition>
-      expirationDateEqualTo(DateTime value) {
+      expirationDateEqualTo(
+    String value, {
+    bool caseSensitive = true,
+  }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
         property: r'expirationDate',
         value: value,
+        caseSensitive: caseSensitive,
       ));
     });
   }
 
   QueryBuilder<CheckoutCard, CheckoutCard, QAfterFilterCondition>
       expirationDateGreaterThan(
-    DateTime value, {
+    String value, {
     bool include = false,
+    bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.greaterThan(
         include: include,
         property: r'expirationDate',
         value: value,
+        caseSensitive: caseSensitive,
       ));
     });
   }
 
   QueryBuilder<CheckoutCard, CheckoutCard, QAfterFilterCondition>
       expirationDateLessThan(
-    DateTime value, {
+    String value, {
     bool include = false,
+    bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.lessThan(
         include: include,
         property: r'expirationDate',
         value: value,
+        caseSensitive: caseSensitive,
       ));
     });
   }
 
   QueryBuilder<CheckoutCard, CheckoutCard, QAfterFilterCondition>
       expirationDateBetween(
-    DateTime lower,
-    DateTime upper, {
+    String lower,
+    String upper, {
     bool includeLower = true,
     bool includeUpper = true,
+    bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.between(
@@ -461,6 +471,77 @@ extension CheckoutCardQueryFilter
         includeLower: includeLower,
         upper: upper,
         includeUpper: includeUpper,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<CheckoutCard, CheckoutCard, QAfterFilterCondition>
+      expirationDateStartsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.startsWith(
+        property: r'expirationDate',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<CheckoutCard, CheckoutCard, QAfterFilterCondition>
+      expirationDateEndsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.endsWith(
+        property: r'expirationDate',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<CheckoutCard, CheckoutCard, QAfterFilterCondition>
+      expirationDateContains(String value, {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.contains(
+        property: r'expirationDate',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<CheckoutCard, CheckoutCard, QAfterFilterCondition>
+      expirationDateMatches(String pattern, {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.matches(
+        property: r'expirationDate',
+        wildcard: pattern,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<CheckoutCard, CheckoutCard, QAfterFilterCondition>
+      expirationDateIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'expirationDate',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<CheckoutCard, CheckoutCard, QAfterFilterCondition>
+      expirationDateIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        property: r'expirationDate',
+        value: '',
       ));
     });
   }
@@ -636,10 +717,11 @@ extension CheckoutCardQueryWhereDistinct
     });
   }
 
-  QueryBuilder<CheckoutCard, CheckoutCard, QDistinct>
-      distinctByExpirationDate() {
+  QueryBuilder<CheckoutCard, CheckoutCard, QDistinct> distinctByExpirationDate(
+      {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(r'expirationDate');
+      return query.addDistinctBy(r'expirationDate',
+          caseSensitive: caseSensitive);
     });
   }
 }
@@ -665,7 +747,7 @@ extension CheckoutCardQueryProperty
     });
   }
 
-  QueryBuilder<CheckoutCard, DateTime, QQueryOperations>
+  QueryBuilder<CheckoutCard, String, QQueryOperations>
       expirationDateProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'expirationDate');

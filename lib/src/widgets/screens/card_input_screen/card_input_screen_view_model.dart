@@ -1,6 +1,8 @@
 // ignore_for_file: lines_longer_than_80_chars
 
 import 'package:checkout/asset_paths.dart';
+import 'package:checkout/src/models/checkout_card_model.dart';
+import 'package:checkout/src/services/db_service.dart';
 import 'package:credit_card_validator/credit_card_validator.dart';
 import 'package:date_format/date_format.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
@@ -65,18 +67,41 @@ enum CheckoutCardType {
 }
 
 class CardInputScreenViewModel with ChangeNotifier {
+  CardInputScreenViewModel() {
+    _cardCVVFocusNode.addListener(() {
+      if (_cardCVVFocusNode.hasFocus) {
+        _showCardBack = true;
+        notifyListeners();
+        return;
+      }
+
+      _showCardBack = false;
+      notifyListeners();
+    });
+  }
+
   final _validator = CreditCardValidator();
 
-  final _cardNumberController = TextEditingController();
   final _formattedDateController = TextEditingController();
 
+  final _cardNumberController = TextEditingController();
+
   String? _cardCVV;
+  final FocusNode _cardCVVFocusNode = FocusNode();
+  TextEditingController get cvvFieldController => TextEditingController();
+
+  String? get cardCvv => _cardCVV;
+  FocusNode? get cardCVVFocusNode => _cardCVVFocusNode;
+
+  bool _showCardBack = false;
+
   CheckoutCardType? _cardType;
   DateTime? _selectedExpirationDate;
   String? _cardNumberErrorMessage;
   String? _formattedDateErrorMessage;
 
-  String? get cardCvv => _cardCVV;
+  bool get showCardBack => _showCardBack;
+
   String? get cardNumberErrorMessage => _cardNumberErrorMessage;
   String? get formattedDateErrorMessage => _formattedDateErrorMessage;
   CheckoutCardType? get cardType => _cardType;
@@ -160,5 +185,17 @@ class CardInputScreenViewModel with ChangeNotifier {
       _cardType = CheckoutCardType.fromString(result.ccType.prettyType);
       notifyListeners();
     }
+  }
+
+  void saveCard() {
+    final db = DatabaseService();
+
+    final checkoutCard = CheckoutCard(
+      cardType: _cardType!,
+      cardNumber: cardNumberController.text,
+      expirationDate: _formattedDateController.text,
+    );
+
+    db.saveCard(checkoutCard);
   }
 }

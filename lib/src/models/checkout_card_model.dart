@@ -18,5 +18,5 @@ class CheckoutCard {
   @enumerated
   late CheckoutCardType cardType;
 
-  late DateTime expirationDate;
+  late String expirationDate;
 }

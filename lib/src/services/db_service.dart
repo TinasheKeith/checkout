@@ -1,5 +1,3 @@
-import 'dart:js_interop';
-
 import 'package:checkout/src/models/checkout_card_model.dart';
 import 'package:isar/isar.dart';
 import 'package:path_provider/path_provider.dart';
@@ -33,15 +31,15 @@ class DatabaseService {
   Future<void> saveCard(CheckoutCard card) async {
     final isar = await db;
 
-    final alreadySaved = isar.checkoutCards
-        .filter()
-        .cardNumberEqualTo(card.cardNumber)
-        .findFirstSync()
-        .isDefinedAndNotNull;
+    final cardExists = isar.checkoutCards
+            .filter()
+            .cardNumberEqualTo(card.cardNumber)
+            .findFirstSync() !=
+        null;
 
-    if (alreadySaved) return;
+    if (cardExists) return;
 
-    await isar.writeTxnSync(
+    await isar.writeTxn(
       () => isar.checkoutCards.put(card),
     );
   }
