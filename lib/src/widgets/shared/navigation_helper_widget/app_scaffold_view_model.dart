@@ -2,7 +2,7 @@
 
 import 'package:checkout/mixins/responsive_helper_mixin.dart';
 import 'package:checkout/src/widgets/screens/card_input_screen/card_input_screen.dart';
-import 'package:checkout/src/widgets/screens/dashboard_screen%20/dashboard_screen.dart';
+import 'package:checkout/src/widgets/screens/dashboard_screen/dashboard_screen.dart';
 import 'package:checkout/src/widgets/screens/settings_screen/settings_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -62,7 +62,7 @@ class AppScaffoldViewModel with ChangeNotifier, ResponsiveMixin {
                 content: ConstrainedBox(
                   constraints: const BoxConstraints(
                     maxHeight: 600,
-                    minWidth: 350,
+                    minWidth: 400,
                   ),
                   child: CardInputScreen(),
                 ),

@@ -5,7 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
-@immutable
+final scaffoldKey = GlobalKey<ScaffoldMessengerState>();
+
 class App extends StatelessWidget {
   const App({
     super.key,
@@ -17,6 +18,7 @@ class App extends StatelessWidget {
     const checkoutThemeDark = CheckoutTheme(primaryColor: Colors.white);
 
     return MaterialApp.router(
+      scaffoldMessengerKey: scaffoldKey,
       restorationScopeId: 'app',
       localizationsDelegates: const [
         AppLocalizations.delegate,

@@ -1,12 +1,15 @@
 // ignore_for_file: lines_longer_than_80_chars
 
 import 'package:checkout/asset_paths.dart';
+import 'package:checkout/src/app.dart';
+import 'package:checkout/src/locator.dart';
 import 'package:checkout/src/models/checkout_card_model.dart';
-import 'package:checkout/src/services/db_service.dart';
+import 'package:checkout/src/services/shared_preferences_service.dart';
 import 'package:credit_card_validator/credit_card_validator.dart';
 import 'package:date_format/date_format.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 
 enum CheckoutCardType {
   visa('Visa'),
@@ -176,26 +179,46 @@ class CardInputScreenViewModel with ChangeNotifier {
     if (result.message.isNotEmpty) {
       _cardNumberErrorMessage = result.message;
       _cardType = null;
-      notifyListeners();
+      notifySafely();
       return;
     }
 
     if (result.isPotentiallyValid) {
       _cardNumberErrorMessage = null;
       _cardType = CheckoutCardType.fromString(result.ccType.prettyType);
-      notifyListeners();
+      notifySafely();
     }
   }
 
-  void saveCard() {
-    final db = DatabaseService();
+  void notifySafely() {
+    SchedulerBinding.instance.addPostFrameCallback((_) {
+      notifyListeners();
+    });
+  }
 
-    final checkoutCard = CheckoutCard(
-      cardType: _cardType!,
-      cardNumber: cardNumberController.text,
-      expirationDate: _formattedDateController.text,
+  void saveCard() async {
+    final result = await locator<SharedPreferencesService>().saveCard(
+      CheckoutCard(
+        cardType: _cardType!,
+        cardNumber: cardNumberController.text,
+        expirationDate: _formattedDateController.text,
+      ),
     );
 
-    db.saveCard(checkoutCard);
+    if (result == SaveCardResponse.exists) {
+      scaffoldKey.currentState?.showSnackBar(
+        const SnackBar(
+          content: Text('Card already saved!'),
+        ),
+      );
+    }
+
+    if (result == SaveCardResponse.success) {
+      scaffoldKey.currentState?.showSnackBar(
+        const SnackBar(
+          content: Text('Saved!'),
+        ),
+      );
+    }
   }
 }

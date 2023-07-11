@@ -1,14 +1,14 @@
+import 'package:checkout/main.dart';
 import 'package:checkout/src/app.dart';
 import 'package:checkout/src/constants.dart';
-import 'package:checkout/src/services/db_service.dart';
+import 'package:checkout/src/locator.dart';
 import 'package:flutter/material.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 
 void main() async {
   const sentryEnvironment = 'staging';
 
-  // ignore: unused_local_variable
-  final dbService = DatabaseService();
+  setupLocator(AppFlavor.staging);
 
   await SentryFlutter.init(
     (options) {

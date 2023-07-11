@@ -1,13 +1,13 @@
+import 'package:checkout/main.dart';
 import 'package:checkout/src/app.dart';
-import 'package:checkout/src/services/db_service.dart';
+import 'package:checkout/src/locator.dart';
 import 'package:device_preview/device_preview.dart';
 import 'package:flutter/material.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  // ignore: unused_local_variable
-  final dbService = DatabaseService();
+  setupLocator(AppFlavor.development);
 
   runApp(
     DevicePreview(

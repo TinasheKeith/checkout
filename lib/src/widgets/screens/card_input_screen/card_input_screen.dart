@@ -18,7 +18,7 @@ class CardInputScreen extends StatelessWidget {
       child: Consumer<CardInputScreenViewModel>(
         builder: (context, viewModel, child) {
           return Form(
-            autovalidateMode: AutovalidateMode.always,
+            autovalidateMode: AutovalidateMode.onUserInteraction,
             key: _formKey,
             child: Scaffold(
               backgroundColor:
@@ -37,17 +37,20 @@ class CardInputScreen extends StatelessWidget {
                       child: SingleChildScrollView(
                         child: Column(
                           children: [
-                            CreditCardWidget(
-                              cardNumber: viewModel.cardNumberController.text,
-                              expiryDate:
-                                  viewModel.formattedDateController.text,
-                              bankName: 'Checkout App',
-                              cardBgColor: Theme.of(context).primaryColor,
-                              cardHolderName: '',
-                              obscureInitialCardNumber: true,
-                              cvvCode: viewModel.cvvFieldController.text,
-                              showBackView: viewModel.showCardBack,
-                              onCreditCardWidgetChange: (p0) {},
+                            ConstrainedBox(
+                              constraints: const BoxConstraints(maxHeight: 280),
+                              child: CreditCardWidget(
+                                cardNumber: viewModel.cardNumberController.text,
+                                expiryDate:
+                                    viewModel.formattedDateController.text,
+                                bankName: 'Checkout App',
+                                cardBgColor: Theme.of(context).primaryColor,
+                                cardHolderName: '',
+                                obscureInitialCardNumber: true,
+                                cvvCode: viewModel.cvvFieldController.text,
+                                showBackView: viewModel.showCardBack,
+                                onCreditCardWidgetChange: (p0) {},
+                              ),
                             ),
                             const SizedBox(height: 24),
                             TextFormField(
