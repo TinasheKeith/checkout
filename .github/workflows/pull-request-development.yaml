@@ -27,7 +27,7 @@ jobs:
 
             - name: 'Build runner'
               shell: bash
-              run: flutter packages pub run build_runner build
+              run: flutter packages pub run build_runner build --delete-conflicting-outputs
 
             - name: Run linting
               run: flutter analyze
