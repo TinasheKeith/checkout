@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
+  // ignore: unused_local_variable
   final dbService = DatabaseService();
 
   runApp(
