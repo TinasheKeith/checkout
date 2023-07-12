@@ -1,5 +1,7 @@
 import 'package:checkout/asset_paths.dart';
+import 'package:checkout/mixins/responsive_helper_mixin.dart';
 import 'package:checkout/src/widgets/screens/dashboard_screen/dashboard_screen_view_model.dart';
+import 'package:checkout/src/widgets/shared/responsive_builder.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
@@ -26,7 +28,9 @@ class DashboardScreen extends StatelessWidget {
                 if (viewModel.cards.isEmpty)
                   const _DashboardEmptyStateWidget()
                 else
-                  _DashboardContentWidget(viewModel: viewModel),
+                  Expanded(
+                    child: _DashboardContentWidget(viewModel: viewModel),
+                  ),
               ],
             ),
           );
@@ -45,24 +49,78 @@ class _DashboardContentWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListView.separated(
-      itemBuilder: (context, index) {
-        final card = viewModel.cards[index];
+    return ResponsiveBuilder(
+      mobileWidget: _MobileDashboardBody(viewModel),
+      desktopWidget: _DesktopDashboardBody(viewModel),
+    );
+  }
+}
 
-        return ListTile(
-          trailing: card.cardType.getLogoAsset(20),
-        );
-      },
-      separatorBuilder: (context, val) {
-        return const SizedBox(height: 12);
-      },
-      itemCount: viewModel.cards.length,
+class _MobileDashboardBody extends StatelessWidget {
+  const _MobileDashboardBody(this.viewModel);
+
+  final DashboardScreenViewModel viewModel;
+
+  @override
+  Widget build(BuildContext context) {
+    return _SharedDashboardBody(viewModel: viewModel);
+  }
+}
+
+class _DesktopDashboardBody extends StatelessWidget with ResponsiveMixin {
+  const _DesktopDashboardBody(this.viewModel);
+
+  final DashboardScreenViewModel viewModel;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        SizedBox(
+          width: screenWidth(context) * 0.8,
+          child: Center(
+            child: _MobileDashboardBody(viewModel),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _SharedDashboardBody extends StatelessWidget {
+  const _SharedDashboardBody({required this.viewModel});
+
+  final DashboardScreenViewModel viewModel;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Text(
+          'Your recent cards',
+          style: Theme.of(context).textTheme.bodyLarge,
+        ),
+        ListView.separated(
+          itemBuilder: (context, index) {
+            final card = viewModel.cards[index];
+
+            return ListTile(
+              title: Text(card.cardNumber),
+            );
+          },
+          separatorBuilder: (context, val) {
+            return const SizedBox(height: 12);
+          },
+          itemCount: viewModel.cards.length,
+        ),
+      ],
     );
   }
 }
 
 class _DashboardEmptyStateWidget extends StatefulWidget {
-  const _DashboardEmptyStateWidget({super.key});
+  const _DashboardEmptyStateWidget();
 
   @override
   State<_DashboardEmptyStateWidget> createState() =>

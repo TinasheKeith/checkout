@@ -79,7 +79,8 @@ class CardInputScreen extends StatelessWidget {
                                 suffixIcon: SizedBox(
                                   child: Padding(
                                     padding: const EdgeInsets.all(8),
-                                    child: viewModel.cardType?.getLogoAsset(32),
+                                    child:
+                                        viewModel.cardType?.getLogoWidget(32),
                                   ),
                                 ),
                                 floatingLabelBehavior:
@@ -111,8 +112,16 @@ class CardInputScreen extends StatelessWidget {
                                 const SizedBox(width: 6),
                                 Expanded(
                                   child: TextFormField(
+                                    validator: viewModel.validateCVV,
+                                    keyboardType: TextInputType.number,
+                                    inputFormatters: [
+                                      FilteringTextInputFormatter.digitsOnly
+                                    ],
                                     controller: viewModel.cvvFieldController,
                                     focusNode: viewModel.cardCVVFocusNode,
+                                    maxLength: 3,
+                                    maxLengthEnforcement: MaxLengthEnforcement
+                                        .truncateAfterCompositionEnds,
                                     decoration: const InputDecoration(
                                       label: Text('CVV'),
                                       hintText: '123',

@@ -1,46 +1,28 @@
-// import 'package:checkout/src/models/checkout_card_model.dart';
-// import 'package:isar/isar.dart';
-// import 'package:path_provider/path_provider.dart';
+import 'dart:async';
 
-// class DatabaseService {
-//   DatabaseService() {
-//     db = openDb();
-//   }
+import 'package:checkout/src/models/checkout_card_model.dart';
+import 'package:hive_flutter/adapters.dart';
 
-//   late Future<Isar> db;
+enum SaveCardResult {
+  success,
+  exists,
+}
 
-//   Future<Isar> openDb({bool showInspector = true}) async {
-//     final dir = await getApplicationDocumentsDirectory();
-//     if (Isar.instanceNames.isEmpty) {
-//       return Isar.open(
-//         [CheckoutCardSchema],
-//         directory: dir.path,
-//         inspector: showInspector,
-//       );
-//     }
+class DatabaseService {
+  final String _boxName = 'cards';
 
-//     return Future.value(Isar.getInstance());
-//   }
+  Future<SaveCardResult> saveCard(CheckoutCard card) async {
+    final box = await Hive.openBox<CheckoutCard>(_boxName);
 
-//   Stream<List<CheckoutCard>> getCheckoutCardsStream() async* {
-//     final isar = await db;
+    if (!box.containsKey(card.id)) {
+      await box.put(card.id, card);
+      return SaveCardResult.success;
+    }
+    return SaveCardResult.exists;
+  }
 
-//     yield* isar.checkoutCards.where().watch(fireImmediately: true);
-//   }
-
-//   Future<void> saveCard(CheckoutCard card) async {
-//     final isar = await db;
-
-//     final cardExists = isar.checkoutCards
-//             .filter()
-//             .cardNumberEqualTo(card.cardNumber)
-//             .findFirstSync() !=
-//         null;
-
-//     if (cardExists) return;
-
-//     await isar.writeTxn(
-//       () => isar.checkoutCards.put(card),
-//     );
-//   }
-// }
+  Future<List<CheckoutCard>> getAllCards() async {
+    final box = await Hive.openBox<CheckoutCard>(_boxName);
+    return box.values.toList();
+  }
+}
