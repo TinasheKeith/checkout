@@ -2,6 +2,8 @@ import 'package:checkout/mixins/card_number_input_formatter.dart';
 import 'package:checkout/src/widgets/screens/card_input_screen/card_input_screen_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_credit_card/credit_card_widget.dart';
+import 'package:flutter_credit_card/flutter_credit_card.dart';
 import 'package:provider/provider.dart';
 
 class CardInputScreen extends StatelessWidget {
@@ -16,7 +18,7 @@ class CardInputScreen extends StatelessWidget {
       child: Consumer<CardInputScreenViewModel>(
         builder: (context, viewModel, child) {
           return Form(
-            autovalidateMode: AutovalidateMode.always,
+            autovalidateMode: AutovalidateMode.onUserInteraction,
             key: _formKey,
             child: Scaffold(
               backgroundColor:
@@ -35,6 +37,21 @@ class CardInputScreen extends StatelessWidget {
                       child: SingleChildScrollView(
                         child: Column(
                           children: [
+                            ConstrainedBox(
+                              constraints: const BoxConstraints(maxHeight: 280),
+                              child: CreditCardWidget(
+                                cardNumber: viewModel.cardNumberController.text,
+                                expiryDate:
+                                    viewModel.formattedDateController.text,
+                                bankName: 'Checkout App',
+                                cardBgColor: Theme.of(context).primaryColor,
+                                cardHolderName: '',
+                                obscureInitialCardNumber: true,
+                                cvvCode: viewModel.cvvFieldController.text,
+                                showBackView: viewModel.showCardBack,
+                                onCreditCardWidgetChange: (p0) {},
+                              ),
+                            ),
                             const SizedBox(height: 24),
                             TextFormField(
                               validator: (value) =>
@@ -62,7 +79,8 @@ class CardInputScreen extends StatelessWidget {
                                 suffixIcon: SizedBox(
                                   child: Padding(
                                     padding: const EdgeInsets.all(8),
-                                    child: viewModel.cardType?.getLogoAsset(32),
+                                    child:
+                                        viewModel.cardType?.getLogoWidget(32),
                                   ),
                                 ),
                                 floatingLabelBehavior:
@@ -92,9 +110,19 @@ class CardInputScreen extends StatelessWidget {
                                   ),
                                 ),
                                 const SizedBox(width: 6),
-                                const Expanded(
-                                  child: TextField(
-                                    decoration: InputDecoration(
+                                Expanded(
+                                  child: TextFormField(
+                                    validator: viewModel.validateCVV,
+                                    keyboardType: TextInputType.number,
+                                    inputFormatters: [
+                                      FilteringTextInputFormatter.digitsOnly
+                                    ],
+                                    controller: viewModel.cvvFieldController,
+                                    focusNode: viewModel.cardCVVFocusNode,
+                                    maxLength: 3,
+                                    maxLengthEnforcement: MaxLengthEnforcement
+                                        .truncateAfterCompositionEnds,
+                                    decoration: const InputDecoration(
                                       label: Text('CVV'),
                                       hintText: '123',
                                       floatingLabelBehavior:
@@ -119,6 +147,7 @@ class CardInputScreen extends StatelessWidget {
                 color: Theme.of(context).primaryColor,
                 onPressed: () {
                   _formKey.currentState?.validate();
+                  viewModel.saveCard();
                 },
                 child: Text(
                   'SUBMIT FOR VALIDATION',

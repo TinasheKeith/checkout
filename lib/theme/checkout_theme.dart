@@ -51,6 +51,13 @@ class CheckoutTheme extends ThemeExtension<CheckoutTheme> {
           borderRadius: BorderRadius.circular(4),
         ),
       ),
+      snackBarTheme: SnackBarThemeData(
+        behavior: SnackBarBehavior.floating,
+        backgroundColor: primaryColor,
+        contentTextStyle: const TextStyle(
+          color: Colors.white,
+        ),
+      ),
       bottomNavigationBarTheme: const BottomNavigationBarThemeData(
         elevation: 0,
       ),
