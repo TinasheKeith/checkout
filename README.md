@@ -21,6 +21,8 @@ These decisions early in the project did have an impact on the ease of deliverin
 
 Checkout initially used IsarDB. I hadn't heard of it before to be honest. I was initially going with HiveDB, which I have used once before, but Isar was by the same creator and claimed to support web and had a really cool debugging inspector that I thought could really be a godsend for future projects and was keen to try it out. Isar is fantastic to work with, easy to set up and the inspector UI was amazing! You can even listen to your stored collection easily and just update your view when your collection changes with a streambuilder (godsend!) but after I'd already finished and had been testing on moile, I'd come to discover a javascript error that was failing the build... hmmm 🤨 that's suspicious. I eventually stumbled onto this GitHub thread [https://github.com/isar/isar/issues/686] where it was basically concluded that although it says it supports web, Isar does not support web yet.
 
+I've left the openPR with the javascript error failing in the CI build here: [https://github.com/TinasheKeith/checkout/actions/runs/5518895145/jobs/10063439840?pr=11]
+
 With a few hours until the app was due, I figured the easiest course would be to do away with Isar and just serialise the card objects and store them in shared preferences, although admittedly I'd entertained this, there are some commits that would suggest there was a full implementation of sharedPreferences as the persistence layer before I added HiveDB, but that is Git's word against mine and I say that did not happen! (it did 😅) Either way, the final app persists cards to HiveDB.
 
 Dev:
